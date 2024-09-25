@@ -1,0 +1,128 @@
+--[[
+
+		Gui2Lua™
+		10zOfficial
+		Version 1.0.0
+
+]]
+
+-- Instances
+
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local TextBox = Instance.new("TextBox")
+local TextButton = Instance.new("TextButton")
+local TextButton_2 = Instance.new("TextButton")
+
+-- Variables
+local correctKey = "trollinggui"
+local UIS = game:GetService("UserInputService")
+local dragging, dragInput, dragStart, startPos
+
+-- Draggable Function
+local function makeDraggable(frame)
+	frame.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = true
+			dragStart = input.Position
+			startPos = frame.Position
+			
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+
+	frame.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement then
+			dragInput = input
+		end
+	end)
+
+	UIS.InputChanged:Connect(function(input)
+		if input == dragInput and dragging then
+			local delta = input.Position - dragStart
+			Frame.Position = UDim2.new(
+				startPos.X.Scale,
+				startPos.X.Offset + delta.X,
+				startPos.Y.Scale,
+				startPos.Y.Offset + delta.Y
+			)
+		end
+	end)
+end
+
+-- Properties
+
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui") -- This ensures the ScreenGui is parented to PlayerGui, not StarterGui
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.new(0.0901961, 0.0901961, 0.0901961)
+Frame.BorderColor3 = Color3.new(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.107371792, 0, 0.382897407, 0)
+Frame.Size = UDim2.new(0, 532, 0, 391)
+
+UICorner.Parent = Frame
+UICorner.CornerRadius = UDim.new(0.200000003, 8)
+
+TextBox.Parent = Frame
+TextBox.BackgroundColor3 = Color3.new(0.176471, 0.176471, 0.176471)
+TextBox.BorderColor3 = Color3.new(0, 0, 0)
+TextBox.BorderSizePixel = 0
+TextBox.Position = UDim2.new(0.184210524, 0, 0.526854038, 0)
+TextBox.Size = UDim2.new(0, 311, 0, -142)
+TextBox.Font = Enum.Font.SourceSans
+TextBox.Text = "-- enter key"
+TextBox.TextColor3 = Color3.new(0, 0, 0)
+TextBox.TextScaled = true
+TextBox.TextSize = 14
+TextBox.TextWrapped = true
+
+TextButton.Parent = Frame
+TextButton.BackgroundColor3 = Color3.new(0.0901961, 0.0901961, 0.0901961)
+TextButton.BorderColor3 = Color3.new(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.0814420059, 0, 0.671205342, 0)
+TextButton.Size = UDim2.new(0, 200, 0, 50)
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = "get key"
+TextButton.TextColor3 = Color3.new(1, 1, 1)
+TextButton.TextScaled = true
+TextButton.TextSize = 14
+TextButton.TextWrapped = true
+
+TextButton_2.Parent = Frame
+TextButton_2.BackgroundColor3 = Color3.new(0.0901961, 0.0901961, 0.0901961)
+TextButton_2.BorderColor3 = Color3.new(0, 0, 0)
+TextButton_2.BorderSizePixel = 0
+TextButton_2.Position = UDim2.new(0.557005942, 0, 0.671205342, 0)
+TextButton_2.Size = UDim2.new(0, 200, 0, 50)
+TextButton_2.Font = Enum.Font.SourceSans
+TextButton_2.Text = "submit"
+TextButton_2.TextColor3 = Color3.new(1, 1, 1)
+TextButton_2.TextScaled = true
+TextButton_2.TextSize = 14
+TextButton_2.TextWrapped = true
+
+-- Make Frame Draggable
+makeDraggable(Frame)
+
+-- Get Key Functionality
+TextButton.MouseButton1Click:Connect(function()
+	setclipboard("trollinggui")
+	TextBox.Text = "Copied key to clipboard, paste it in here and press submit"
+end)
+
+-- Submit Key Functionality
+TextButton_2.MouseButton1Click:Connect(function()
+	if TextBox.Text == correctKey then
+		Frame:Destroy()  -- Remove key system GUI
+		loadstring(game:HttpGet('https://raw.githubusercontent.com/norizzaa/slushy-hub-universal-kavo-ui/refs/heads/main/trolling%20gui%20(mostly%20fe)'))()  -- Load the trolling GUI
+	else
+		TextBox.Text = "Invalid key, try again!"
+	end
+end)
