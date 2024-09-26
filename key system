@@ -127,3 +127,5 @@ TextButton_2.MouseButton1Click:Connect(function()
 	end
 end)
 print("you can very much bypass this key system, but only if you look hard enough!")
+wait(1.5)
+print("anyways enjoy")
